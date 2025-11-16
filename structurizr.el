@@ -35,6 +35,7 @@
 
 (require 'treesit)
 (require 'eglot)
+(require 'color)
 
 (defvar structurizr--font-lock-settings
   (treesit-font-lock-rules
@@ -73,15 +74,14 @@
   (let* ((start (treesit-node-start node))
          (end (treesit-node-end node))
          (bg-color (treesit-node-text node))
-         (light (caddr (apply 'color-rgb-to-hsl (color-name-to-rgb bg-color))))
+         (light (caddr (apply #'color-rgb-to-hsl (color-name-to-rgb bg-color))))
          (fg-color (if (> light 0.5) "#000" "#fff")))
     (put-text-property start end 'face
                        `(:background ,bg-color :foreground ,fg-color))))
 
 ;; Register the tree-sitter repository for Structurizr
 (setf (alist-get 'structurizr treesit-language-source-alist)
-      '("https://github.com/josteink/tree-sitter-structurizr"
-        :commit "7a29c74bd18b763d86c919d74a2f730e3c341666"))
+      '("https://github.com/josteink/tree-sitter-structurizr"))
 
 (defcustom structurizr-language-server-path
   "~/programs/c4-language-server/bin/c4-language-server"
@@ -112,10 +112,11 @@ really need network mode for this language server (\"-c socket\")."
   :group 'structurizr
 
   (if (not (treesit-ready-p 'structurizr))
-      (treesit-ensure-installed 'structurizr))
+      (if (yes-or-no-p "Treesitter grammar for structurizr isn't installed. Do you want to install it now?")
+          (call-interactively #'treesit-install-language-grammar 'structurizr)))
 
   (if (not (treesit-ready-p 'structurizr))
-      (error "This mode needs tree-sitter support! You can install it with M-x treesit-install-language-grammar"))
+      (error "This mode needs tree-sitter support! You can install it with M-x treesit-install-language-grammar structurizr"))
   
   (setq treesit-primary-parser (treesit-parser-create 'structurizr))
   (setq-local treesit-font-lock-settings structurizr--font-lock-settings)

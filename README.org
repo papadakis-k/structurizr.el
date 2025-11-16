@@ -1,6 +1,6 @@
 * About
 
-This is a major mode for Emacs to support editing [[https://docs.structurizr.com/dsl][Structurizr DSL]] files, based on [[https://github.com/josteink/tree-sitter-structurizr][Structurizr treesitter.]] Currently it supports font-lock-ing, CSS color highlighting and indentation.
+This is a major mode for Emacs to support editing [[https://docs.structurizr.com/dsl][Structurizr DSL]] files, based on [[https://github.com/josteink/tree-sitter-structurizr][Structurizr treesitter.]] Currently it supports font-locking, CSS color highlighting and indentation.
 
 * Usage
 
@@ -11,7 +11,9 @@ The most basic configuration to use this mode would be something like the follow
   :mode ("\\.dsl\\'" . structurizr-mode))
 #+end_src
 
-The first time you enter =structurizr-mode=, it will ask you to install the [[https://github.com/josteink/tree-sitter-structurizr][Structurizr Treesitter Grammar library]].
+With the configuration above, after visiting a .dsl file it will try to parse it with treesitter.
+
+The code should register the [[https://github.com/josteink/tree-sitter-structurizr][Github repository]] for Structurizr treesitter grammar, and it should ask to install it automatically. In any case it can also be installed manually (=M-x= [Enter] =treesit-install-language-grammar= [Enter] =structurizr= [Enter]).
 
 * Eglot
 
