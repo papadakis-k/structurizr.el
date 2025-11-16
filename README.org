@@ -1,6 +1,6 @@
 * About
 
-This is a major mode for Emacs to support editing Structurizr DSL files. It is based on [[https://github.com/josteink/tree-sitter-structurizr][Structurizr treesitter]] and provides also support for Eglot by integrating [[https://gitlab.com/systemticks/c4-dsl-language-server][C4 DSL Language Server]].
+This is a major mode for Emacs to support editing [[https://docs.structurizr.com/dsl][Structurizr DSL]] files, based on [[https://github.com/josteink/tree-sitter-structurizr][Structurizr treesitter.]] Currently it supports font-lock-ing, CSS color highlighting and indentation.
 
 * Usage
 
@@ -13,6 +13,8 @@ The most basic configuration to use this mode would be something like the follow
 
 The first time you enter =structurizr-mode=, it will ask you to install the [[https://github.com/josteink/tree-sitter-structurizr][Structurizr Treesitter Grammar library]].
 
+* Eglot
+
 If you want, in addition, to use Eglot you will have to install the [[https://gitlab.com/systemticks/c4-dsl-language-server][C4 DSL Language Server]]. After installing it you will have to customize (M-x customize-variable) the variable =structurizr-language-server-path=, in order to point to the =c4-language-server= executable.
 
-Eglot might fail to start sometimes, due to a startup issue syncrhonization issue, and all you have to do is retry (i.e. rerun the =eglot= command).
+Eglot might fail to start sometimes, due to a startup syncrhonization issue, and all you have to do is retry (i.e. rerun the =eglot= command).
