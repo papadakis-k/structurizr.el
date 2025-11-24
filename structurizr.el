@@ -69,7 +69,7 @@
      ((parent-is "_declaration") parent-bol tab-width)
      (catch-all parent-bol 0))))
 
-(defun structurizr--colorize-color(node _ _ _ &rest _)
+(defun structurizr--colorize-color (node _ _ _ &rest _)
   "Colorize the treesitter NODE with its CSS color."
   (let* ((start (treesit-node-start node))
          (end (treesit-node-end node))
@@ -92,14 +92,17 @@ really need network mode for this language server (\"-c socket\")."
   :group 'structurizr
   :type '(string))
 
-(defun structurizr--eglot-connect(_ _)
+(defun structurizr--eglot-connect (_ _)
   "Helper function for wiring up Eglot to this LS."
   (let ((buffer-name "*EGLOT c4-language-server process*")
-        (src-dir (file-name-directory (symbol-file 'structurizr-mode))))
+        (src-dir (shell-quote-argument
+                  (file-name-directory (symbol-file 'structurizr-mode))))
+        (ls-path (shell-quote-argument
+                  (expand-file-name structurizr-language-server-path))))
     (ignore-errors
       (async-shell-command
        (format "JAVA_TOOL_OPTIONS=-Dlogback.configurationFile=%s/logback.xml \
-%s -c socket" src-dir structurizr-language-server-path) buffer-name))
+%s -c socket" src-dir ls-path) buffer-name))
     (sit-for 1))
   '("localhost" 5008))
 
@@ -112,11 +115,11 @@ really need network mode for this language server (\"-c socket\")."
   :group 'structurizr
 
   (if (not (treesit-ready-p 'structurizr))
-      (if (yes-or-no-p "Treesitter grammar for structurizr isn't installed. Do you want to install it now?")
+      (if (yes-or-no-p "Install treesitter grammar for structurizr now?")
           (call-interactively #'treesit-install-language-grammar 'structurizr)))
 
   (if (not (treesit-ready-p 'structurizr))
-      (error "This mode needs tree-sitter support! You can install it with M-x treesit-install-language-grammar structurizr"))
+      (user-error "This mode needs treesitter support!"))
   
   (setq treesit-primary-parser (treesit-parser-create 'structurizr))
   (setq-local treesit-font-lock-settings structurizr--font-lock-settings)
